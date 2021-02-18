@@ -2,12 +2,13 @@ import sys
 import os
 import itertools
 import random
-import Image  # PIL
-from svmutil import *  # libSVM
+from PIL import Image  # PIL
+from libsvm.svmutil import *
+
 
 # Image data constants
 DIMENSION = 32
-ROOT_DIR = "../images/"
+ROOT_DIR = "./images/"
 DAL = "dalmatian"
 DOLLAR = "dollar_bill"
 PIZZA = "pizza"
@@ -29,23 +30,23 @@ def main():
         models = getModels(train)
         results = None
         if IS_TUNING:
-            print "!!! TUNING MODE !!!"
+            print( "!!! TUNING MODE !!!")
             results = classify(models, tune)
         else:
             results = classify(models, test)
 
-        print
+        print()
         totalCount = 0
         totalCorrect = 0
         for clazz in CLASSES:
             count, correct = results[clazz]
             totalCount += count
             totalCorrect += correct
-            print "%s %d %d %f" % (clazz, correct, count, (float(correct) / count))
-        print "%s %d %d %f" % ("Overall", totalCorrect, totalCount, (float(totalCorrect) / totalCount))
+            print( "%s %d %d %f" % (clazz, correct, count, (float(correct) / count)))
+        print( "%s %d %d %f" % ("Overall", totalCorrect, totalCount, (float(totalCorrect) / totalCount)))
 
     except Exception as e:
-        print e
+        print( e)
         return 5
 
 def classify(models, dataSet):
@@ -55,7 +56,7 @@ def classify(models, dataSet):
         correct = 0
         for item in dataSet[trueClazz]:
             predClazz, prob = predict(models, item)
-            print "%s,%s,%f" % (trueClazz, predClazz, prob)
+            print( "%s,%s,%f" % (trueClazz, predClazz, prob))
             count += 1
             if trueClazz == predClazz: correct += 1
         results[trueClazz] = (count, correct)
